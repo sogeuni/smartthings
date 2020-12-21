@@ -13,7 +13,7 @@
  */
 
 metadata {
-	definition (name: "Sogeuni Xiaomi Zigbee Outlet", namespace: "sogeuni", author: "sogeuni", ocfDeviceType: "oic.d.switch", runLocally: true, minHubCoreVersion: '000.019.00012', executeCommandsLocally: true, genericHandler: "Zigbee") {
+	definition (name: "Sogn Xiaomi Zigbee Outlet", namespace: "sogeuni", author: "sogeuni", ocfDeviceType: "oic.d.switch", runLocally: true, minHubCoreVersion: '000.019.00012', executeCommandsLocally: true, genericHandler: "Zigbee") {
 		capability "Actuator"
 		capability "Configuration"
 		capability "Refresh"
