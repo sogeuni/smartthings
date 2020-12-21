@@ -1,28 +1,62 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@sogeuni 
+bspranger
+/
+Xiaomi
+forked from a4refillpad/Xiaomi
+123
+427
+1.4k
+Code
+Issues
+22
+Pull requests
+4
+Actions
+Projects
+1
+Wiki
+Security
+Insights
+Xiaomi/devicetypes/bspranger/xiaomi-zigbee-outlet.src/xiaomi-zigbee-outlet.groovy
+@veeceeoh
+veeceeoh [UPDATE] v1.2 Ready to use
+…
+Latest commit 63a6963 on 5 Apr 2019
+ History
+ 4 contributors
+@bspranger@mike-debney@veeceeoh@marcos-mvs
+246 lines (224 sloc)  9.39 KB
+  
 /**
- *	Copyright 2015 SmartThings
+ *  Xiaomi Smart Plug - model ZNCZ02LM
+ *  Device Handler for SmartThings
+ *  Version 1.2
  *
- *	Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *	in compliance with the License. You may obtain a copy of the License at:
+ *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ *  in compliance with the License. You may obtain a copy of the License at:
  *
- *		http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- *	Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- *	on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
- *	for the specific language governing permissions and limitations under the License.
+ *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
+ *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
+ *  for the specific language governing permissions and limitations under the License.
+ *
+ *  Based on original device handler by Lazcad / RaveTam
+ *  Updates and contributions to code by a4refillpad, bspranger, marcos-mvs, mike-debney, Tiago_Goncalves, and veeceeoh
  *
  */
 
 metadata {
 	definition (name: "Sogn Xiaomi Zigbee Outlet", namespace: "sogeuni", author: "sogeuni", ocfDeviceType: "oic.d.switch", runLocally: true, minHubCoreVersion: '000.019.00012', executeCommandsLocally: true, genericHandler: "Zigbee") {
-		// capability "Actuator"
-		// capability "Configuration"
-		// capability "Refresh"
-		// capability "Power Meter"
-		// capability "Sensor"
-		// capability "Switch"
-		// capability "Health Check"
-		// capability "Light"
-
+	//definition (name: "Xiaomi Zigbee Outlet", namespace: "bspranger", author: "bspranger") {
 		capability "Actuator"
 		capability "Configuration"
 		capability "Refresh"
@@ -35,80 +69,70 @@ metadata {
 		attribute "lastCheckin", "string"
 		attribute "lastCheckinDate", "String"
 
-		// // Generic
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0B04", deviceJoinName: "Switch"
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0702", deviceJoinName: "Switch"
+		fingerprint profileId: "0104", inClusters: "0000, 0004, 0003, 0006, 0010, 0005, 000A, 0001, 0002", outClusters: "0019, 000A", manufacturer: "LUMI", model: "lumi.plug", deviceJoinName: "Xiaomi Plug"
+	}
 
-		// // Aurora
-		// fingerprint profileId: "0104", inClusters: "0000, 0702, 0003, 0009, 0B04, 0006, 0004, 0005, 0002", outClusters: "0000, 0019, 000A, 0003, 0406", manufacturer: "Develco Products A/S", model: "Smart16ARelay51AU", deviceJoinName: "Aurora Switch" //Aurora Smart Inline Relay
-		// fingerprint profileId: "0104", inClusters: "0000, 0702, 0003, 0009, 0B04, 0006, 0004, 0005, 0002", outClusters: "0000, 0019, 000A, 0003, 0406", manufacturer: "Aurora", model: "Smart16ARelay51AU", deviceJoinName: "Aurora Switch" //Aurora Smart Inline Relay
-
-		// // EZEX
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0006, 0B04, 0702", outClusters: "0019", model: "E210-KR210Z1-HA", deviceJoinName: "eZEX Switch" //EZEX Plug
-
-		// // GE/Jasco
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0702, 0B05", outClusters: "0003, 000A, 0019", manufacturer: "Jasco Products", model: "45853", deviceJoinName: "GE Outlet", ocfDeviceType: "oic.d.smartplug" //GE ZigBee Plug-In Switch
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0702, 0B05", outClusters: "000A, 0019", manufacturer: "Jasco Products", model: "45856", deviceJoinName: "GE Switch" //GE ZigBee In-Wall Switch
-
-		// // INGENIUM
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0B04", outClusters: "0000, 0004", manufacturer: "MEGAMAN", model: "SH-PSUKC44B-E", deviceJoinName: "INGENIUM Outlet", ocfDeviceType: "oic.d.smartplug" //INGENIUM ZB Smart Power Adaptor
-
-		// // Ozom
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0702", outClusters: "0000", manufacturer: "ClimaxTechnology", model: "PSM_00.00.00.35TC", deviceJoinName: "Ozom Outlet", ocfDeviceType: "oic.d.smartplug" //Ozom Smart Plug
-
-		// // Philio
-		// fingerprint manufacturer: " ", model: "PAN18-v1.0.7", deviceJoinName: "Philio Outlet", ocfDeviceType: "oic.d.smartplug" //profileId: "0104", inClusters: "0000, 0003, 0006, 0702", outClusters: "0003, 0019", //Philio Smart Plug
-
-		// // Salus
-		// fingerprint profileId: "0104", inClusters: "0000, 0003, 0004, 0005, 0006, 0702", manufacturer: "SALUS", model: "SX885ZB", deviceJoinName: "Salus Switch" //Salus miniSmartplug
-        
-		// //AduroSmart
-		// fingerprint profileId: "0104", deviceId: "0051", inClusters: "0000, 0003, 0004, 0005, 0006, 0B04, 1000, 0702", outClusters: "0019", manufacturer: "AduroSmart Eria", model: "AD-SmartPlug3001", deviceJoinName: "Eria Switch" //Eria Zigbee Smart Plug
-		// fingerprint profileId: "0104", deviceId: "010A", inClusters: "0000, 0003, 0004, 0005, 0006, 1000", outClusters: "0019", manufacturer: "AduroSmart Eria", model: "BPU3", deviceJoinName: "Eria Switch" //Eria Zigbee On/Off Plug
-		// fingerprint profileId: "0104", deviceId: "0101", inClusters: "0000, 0003, 0004, 0005, 0006, 0008, 1000", outClusters: "0019", manufacturer: "AduroSmart Eria", model: "BDP3001", deviceJoinName: "Eria Switch" //Eria Zigbee Dimmable Plug
+	// simulator metadata
+	simulator {
+		// status messages
+		status "on": "on/off: 1"
+		status "off": "on/off: 0"
+		// reply messages
+		reply "zcl on-off on": "on/off: 1"
+		reply "zcl on-off off": "on/off: 0"
 	}
 
 	tiles(scale: 2) {
 		multiAttributeTile(name:"switch", type: "lighting", width: 6, height: 4, canChangeIcon: true){
 			tileAttribute ("device.switch", key: "PRIMARY_CONTROL") {
-				attributeState "on", label:'${name}', action:"switch.off", icon:"st.switches.switch.on", backgroundColor:"#00A0DC", nextState:"turningOff"
-				attributeState "off", label:'${name}', action:"switch.on", icon:"st.switches.switch.off", backgroundColor:"#ffffff", nextState:"turningOn"
-				attributeState "turningOn", label:'${name}', action:"switch.off", icon:"st.switches.switch.on", backgroundColor:"#00A0DC", nextState:"turningOff"
-				attributeState "turningOff", label:'${name}', action:"switch.on", icon:"st.switches.switch.off", backgroundColor:"#ffffff", nextState:"turningOn"
+				attributeState "on", label:'${name}', action:"switch.off", icon:"st.switches.light.on", backgroundColor:"#00a0dc", nextState:"turningOff"
+				attributeState "off", label:'${name}', action:"switch.on", icon:"st.switches.light.off", backgroundColor:"#ffffff", nextState:"turningOn"
+				attributeState "turningOn", label:'${name}', action:"switch.off", icon:"st.switches.light.on", backgroundColor:"#00a0dc", nextState:"turningOff"
+				attributeState "turningOff", label:'${name}', action:"switch.on", icon:"st.switches.light.off", backgroundColor:"#ffffff", nextState:"turningOn"
 			}
-			tileAttribute ("power", key: "SECONDARY_CONTROL") {
-				attributeState "power", label:'${currentValue} W'
+			tileAttribute("device.lastCheckin", key: "SECONDARY_CONTROL") {
+				attributeState("default", label:'Last Update:\n ${currentValue}',icon: "st.Health & Wellness.health9")
 			}
+		}
+		valueTile("temperature", "device.temperature", width: 2, height: 2) {
+			state("temperature", label:'${currentValue}°',
+				backgroundColors:[
+					[value: 31, color: "#153591"],
+					[value: 44, color: "#1e9cbb"],
+					[value: 59, color: "#90d2a7"],
+					[value: 74, color: "#44b621"],
+					[value: 84, color: "#f1d801"],
+					[value: 95, color: "#d04e00"],
+					[value: 96, color: "#bc2323"]
+				]
+			)
+		}
+		valueTile("power", "device.power", width: 2, height: 2) {
+			state("power", label:'${currentValue}W', backgroundColors:[
+				[value: 0, color: "#ffffff"],
+				[value: 1, color: "#00a0dc"]
+			])
+		}
+		valueTile("energy", "device.energy", width: 2, height: 2) {
+			state("energy", label:'${currentValue}kWh')
 		}
 		standardTile("refresh", "device.refresh", inactiveLabel: false, decoration: "flat", width: 2, height: 2) {
 			state "default", label:"", action:"refresh.refresh", icon:"st.secondary.refresh"
 		}
-		main "switch"
-		details(["switch", "refresh"])
+		main (["switch", "power"])
+			details(["switch", "power", "energy", "temperature", "refresh"])
+	}
+
+	preferences {
+		//Temp Offset Config
+		input description: "", type: "paragraph", element: "paragraph", title: "OFFSETS & UNITS"
+		input "tempOffset", "decimal", title:"Temperature Offset", description:"Adjust temperature by this many degrees", range:"*..*"
+		//Date & Time Config
+		input description: "", type: "paragraph", element: "paragraph", title: "DATE & CLOCK"
+		input name: "dateformat", type: "enum", title: "Set Date Format\n US (MDY) - UK (DMY) - Other (YMD)", description: "Date Format", options:["US","UK","Other"]
+		input name: "clockformat", type: "bool", title: "Use 24 hour clock?"
 	}
 }
-
-// Parse incoming device messages to generate events
-// def parse(String description) {
-// 	log.debug "description is $description"
-// 	def event = zigbee.getEvent(description)
-// 	if (event) {
-// 		if (event.name == "power") {
-// 			def powerValue
-// 			def div = device.getDataValue("divisor")
-// 			div = div ? (div as int) : 10
-// 			powerValue = (event.value as Integer)/div
-// 			sendEvent(name: "power", value: powerValue)
-// 		}
-// 		else {
-// 			sendEvent(event)
-// 		}
-// 	}
-// 	else {
-// 		log.warn "DID NOT PARSE MESSAGE for description : $description"
-// 		log.debug zigbee.parseDescriptionAsMap(description)
-// 	}
-// }
 
 // Parse incoming device messages to generate events
 def parse(String description) {
@@ -196,50 +220,45 @@ private Map parseReportAttributeMessage(String description) {
 }
 
 def off() {
-	zigbee.off()
+	log.debug "${device.displayName}: Turning switch off"
+	sendEvent(name: "switch", value: "off")
+	"st cmd 0x${device.deviceNetworkId} 1 6 0 {}"
 }
 
 def on() {
-	zigbee.on()
+	log.debug "${device.displayName}: Turning switch on"
+	sendEvent(name: "switch", value: "on")
+	"st cmd 0x${device.deviceNetworkId} 1 6 1 {}"
 }
 
 def refresh() {
-	Integer reportIntervalMinutes = 5
-	def cmds = zigbee.onOffRefresh() + zigbee.simpleMeteringPowerRefresh() + zigbee.electricMeasurementPowerRefresh()
-	if (device.getDataValue("manufacturer") == "Jasco Products") {
-		// Some versions of hub firmware will incorrectly remove this binding causing manual control of switch to stop working
-		// This needs to be the first binding table entry because the device will automatically write this entry each time it restarts
-		cmds += ["zdo bind 0x${device.deviceNetworkId} 2 1 0x0006 {${device.zigbeeId}} {${device.zigbeeId}}", "delay 2000"]
+	log.debug "${device.displayName}: Attempting to refresh all values"
+	def refreshCmds = [
+		"st rattr 0x${device.deviceNetworkId} 1 6 0", "delay 500",
+		"st rattr 0x${device.deviceNetworkId} 1 6 0", "delay 250",
+		"st rattr 0x${device.deviceNetworkId} 1 2 0", "delay 250",
+		"st rattr 0x${device.deviceNetworkId} 1 1 0", "delay 250",
+		"st rattr 0x${device.deviceNetworkId} 1 0 0", "delay 250",
+		"st rattr 0x${device.deviceNetworkId} 2 0x000C 0x0055",
+		"delay 250",
+		"st rattr 0x${device.deviceNetworkId} 3 0x000C 0x0055"
+	]
+	return refreshCmds
+}
+
+private Map parseCustomMessage(String description) {
+	def result
+	if (description?.startsWith('on/off: ')) {
+		if (description == 'on/off: 0')
+			result = createEvent(name: "switch", value: "off")
+		else if (description == 'on/off: 1')
+			result = createEvent(name: "switch", value: "on")
 	}
-	cmds + zigbee.onOffConfig(0, reportIntervalMinutes * 60) + zigbee.simpleMeteringPowerConfig() + zigbee.electricMeasurementPowerConfig()
+	return result
 }
 
-def configure() {
-	log.debug "in configure()"
-	if ((device.getDataValue("manufacturer") == "Develco Products A/S") || (device.getDataValue("manufacturer") == "Aurora"))  {
-		device.updateDataValue("divisor", "1")
-	}
-	if (device.getDataValue("manufacturer") == "SALUS") {
-		device.updateDataValue("divisor", "1")
-	}
-	return configureHealthCheck()
-}
-
-def configureHealthCheck() {
-	Integer hcIntervalMinutes = 12
-	sendEvent(name: "checkInterval", value: hcIntervalMinutes * 60, displayed: false, data: [protocol: "zigbee", hubHardwareId: device.hub.hardwareID])
-	return refresh()
-}
-
-def updated() {
-	log.debug "in updated()"
-	// updated() doesn't have it's return value processed as hub commands, so we have to send them explicitly
-	def cmds = configureHealthCheck()
-	cmds.each{ sendHubCommand(new physicalgraph.device.HubAction(it)) }
-}
-
-def ping() {
-	return zigbee.onOffRefresh()
+private Integer convertHexToInt(hex) {
+	Integer.parseInt(hex,16)
 }
 
 def formatDate() {
