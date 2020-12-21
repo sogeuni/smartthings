@@ -241,3 +241,27 @@ def updated() {
 def ping() {
 	return zigbee.onOffRefresh()
 }
+
+def formatDate() {
+	def correctedTimezone = ""
+	def timeString = clockformat ? "HH:mm:ss" : "h:mm:ss aa"
+
+	// If user's hub timezone is not set, display error messages in log and events log, and set timezone to GMT to avoid errors
+	if (!(location.timeZone)) {
+		correctedTimezone = TimeZone.getTimeZone("GMT")
+		log.error "${device.displayName}: Time Zone not set, so GMT was used. Please set up your location in the SmartThings mobile app."
+		sendEvent(name: "error", value: "", descriptionText: "ERROR: Time Zone not set, so GMT was used. Please set up your location in the SmartThings mobile app.")
+	}
+	else {
+		correctedTimezone = location.timeZone
+	}
+	if (dateformat == "US" || dateformat == "" || dateformat == null) {
+		return new Date().format("EEE MMM dd yyyy ${timeString}", correctedTimezone)
+	}
+	else if (dateformat == "UK") {
+		return new Date().format("EEE dd MMM yyyy ${timeString}", correctedTimezone)
+	}
+	else {
+		return new Date().format("EEE yyyy MMM dd ${timeString}", correctedTimezone)
+	}
+}
