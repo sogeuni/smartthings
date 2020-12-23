@@ -19,7 +19,6 @@
 
 metadata {
 	definition (name: "Sogn Xiaomi Zigbee Outlet", namespace: "sogeuni", author: "sogeuni", ocfDeviceType: "oic.d.switch", runLocally: true, minHubCoreVersion: '000.019.00012', executeCommandsLocally: true, genericHandler: "Zigbee") {
-	//definition (name: "Xiaomi Zigbee Outlet", namespace: "bspranger", author: "bspranger") {
 		capability "Actuator"
 		capability "Configuration"
 		capability "Refresh"
@@ -32,7 +31,7 @@ metadata {
 		attribute "lastCheckin", "string"
 		attribute "lastCheckinDate", "String"
 
-		fingerprint profileId: "0104", inClusters: "0000, 0004, 0003, 0006, 0010, 0005, 000A, 0001, 0002", outClusters: "0019, 000A", manufacturer: "LUMI", model: "lumi.plug", deviceJoinName: "Xiaomi Plug"
+		fingerprint profileId: "0104", inClusters: "0000, 0004, 0003, 0006, 0010, 0005, 000A, 0001, 0002", outClusters: "0019, 000A", manufacturer: "LUMI", model: "lumi.plug", deviceJoinName: "Xiaomi Smart Plug"
 	}
 
 	// simulator metadata
