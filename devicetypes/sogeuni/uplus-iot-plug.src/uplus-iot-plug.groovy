@@ -24,7 +24,8 @@ metadata {
 
         command "reset"
         
-        fingerprint mfr: "018C", proc: "0042", model: "0002", deviceJoinName: "UPlus IoT Plug"
+        fingerprint mfr: "018C", proc: "0042", model: "0002", deviceJoinName: "UPlus IoT Plug 10W"
+        fingerprint mfr: "0247", proc: "0042", model: "0001", deviceJoinName: "UPlus IoT Plug 16W"
     }
 
     // simulator metadata
@@ -98,7 +99,7 @@ def updated() {
 
 def initialize() {
     sendEvent(name: "checkInterval", value: 2 * 15 * 60 + 2 * 60, displayed: false, data: [protocol: "zwave", hubHardwareId: device.hub.hardwareID])
-    if (zwaveInfo?.mfr?.equals("018C")) {
+    if (zwaveInfo?.mfr?.equals("018C") || zwaveInfo?.mfr?.equals("0247")) {
         def sec = Math.round(Math.floor(Math.random() * 60))
         def min = refreshMinute ? refreshMinute : 5
         schedule("$sec */$min * * * ?", poll, [forceForLocallyExecuting: true])
